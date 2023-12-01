@@ -17,10 +17,21 @@ const createCompany = async (com: ICompany) => {
     return company._id;
 };
 
-const getCompany = async (companyName: String) => {
+const getCompanyByName = async (companyName: String) => {
     return await Company
     .findOne({name: companyName})
     .select({password: 0, createdAt: 0, updatedAt: 0});
 };
 
-export { createCompany, getCompany }
+const getCompanyById = async (id: String) => {
+    return await Company
+    .findById(id)
+    .select({ password: 0, createdAt: 0, updatedAt: 0 })
+}
+
+const updateCompany = async (email: String, data: any) => {
+    const company = await Company.findOneAndUpdate({ email: email }, data)
+    return company?._id
+}
+
+export { createCompany, getCompanyByName, updateCompany, getCompanyById}
