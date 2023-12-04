@@ -6,6 +6,13 @@ import { generateToken } from "../utility/jwt";
 import Logging from "../library/logging";
 
 const createCompany = async (com: ICompanyInput) => {
+    const oldCompany = await Company.findOne({ email: com.email })
+
+    if (oldCompany) {
+        Logging.error(`${com.email} already exist.`);
+        throw new Error("Email already exist.");
+    }
+
     const company = new Company({
         _id: new mongoose.Types.ObjectId(),
         name: com.name,

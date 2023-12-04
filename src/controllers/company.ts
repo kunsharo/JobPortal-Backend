@@ -7,8 +7,8 @@ const RegisterCompany = async (req: Request, res: Response) => {
         const id = await createCompany(req.body)
         Logging.info(id)
         return res.status(201).json({ created_user: id })
-    } catch (error) {
-        return res.status(500).json({ error: "Internal Server error" })
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message })
     }
 }
 
@@ -20,8 +20,8 @@ const ReadCompany = async (req: Request, res: Response) => {
             return res.status(404).json({ error: "Resource not found" })
         }
         return res.status(201).json({ company: company})
-    } catch (error) {
-        return res.status(500).json({ error: error})
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message})
     }
 }
 
@@ -33,8 +33,8 @@ const ReadComapanyById = async (req: Request, res: Response) => {
             return res.status(404).json({ error: "Resource not found" })
         }
         return res.status(201).json({ company: company})
-    } catch (error) {
-        return res.status(500).json({ error: error})
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message})
     }
 }
 
@@ -46,8 +46,8 @@ const UpdateCompany = async (req: Request, res: Response) => {
             return res.status(404).json({ error: "Not found" })
         }
         return res.status(201).json({ updated_company: companyId})
-    } catch (error) {
-        return res.status(500).json({ error: "Internal Server error" })
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message })
     }
 }
 
@@ -59,8 +59,8 @@ const DeleteCompany = async (req: Request, res: Response) => {
             return res.status(404).json({ error: "Not found" })
         }
         return res.status(201).json({ company: result })
-    } catch (error) {
-        return res.status(500).json({ error: "Internal Server error" })
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message })
     }
 }
 
@@ -68,8 +68,8 @@ const ReadAllCompanies = async (req: Request, res: Response) => {
     try {
         const companies = await getCompanies()
         return res.status(201).json({ companies: companies })
-    } catch (error) {
-        return res.status(500).json({ error: "Internal server error" })
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message })
     }
 }
 
@@ -78,8 +78,8 @@ const Login = async (req: Request, res: Response) => {
         const token = await login(req.body);
         Logging.info(`Token produced : ${token}`);
         res.status(201).json({ token: token })
-    } catch (error) {
-        res.status(500).json({ error: "Internal server error" })
+    } catch (error: any) {
+        res.status(500).json({ error: error.message })
     }
 }
 
