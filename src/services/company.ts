@@ -1,9 +1,11 @@
 import mongoose from "mongoose"
 import Company from "../models/Company"
-import { ICompany } from "../models/interfaces/company"
+import { ICompanyInput, ICompanyLogin } from "../models/interfaces/company"
 import bcrypt from 'bcrypt'
+import { generateToken } from "../utility/jwt";
+import Logging from "../library/logging";
 
-const createCompany = async (com: ICompany) => {
+const createCompany = async (com: ICompanyInput) => {
     const company = new Company({
         _id: new mongoose.Types.ObjectId(),
         name: com.name,
@@ -44,4 +46,31 @@ const removeCompany = async (email: String) => {
     return await Company.deleteOne({ email: email})
 }
 
-export { createCompany, getCompanyByName, updateCompany, getCompanyById, removeCompany, getCompanies }
+const login = async (com: ICompanyLogin) => {
+    const company = await Company
+    .findOne({ email: com.email })
+    
+    if (!company) {
+        Logging.error("Company not found by this email")
+        throw new Error("Company not found by this email.")
+    }
+
+    const isMatch = await bcrypt.compare(com.password, company.password);
+
+    if (isMatch) {
+        return generateToken({
+            _id: company._id,
+            name: company.name,
+            website: company.website,
+            address: company.address,
+            email: company.email,
+            phoneNumber: company.phoneNumber
+        })
+    } else {
+        Logging.error("Password not correct")
+        throw new Error("Password not correct")
+    }
+
+}
+
+export { createCompany, getCompanyByName, updateCompany, getCompanyById, removeCompany, getCompanies, login }

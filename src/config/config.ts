@@ -5,6 +5,7 @@ dotenv.config();
 const MONGO_USERNAME = process.env.MONGO_USERNAME || '';
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD || '';
 const MONGO_URL = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongocluster0.88hlkzj.mongodb.net/?retryWrites=true&w=majority`
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || '';
 
 const SERVER_PORT = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 27010;
 
@@ -14,5 +15,8 @@ export const config = {
     },
     server: {
         port: SERVER_PORT
+    },
+    jwt: {
+        secretKey: JWT_SECRET_KEY
     }
 }

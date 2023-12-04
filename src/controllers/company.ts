@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createCompany, getCompanies, getCompanyById, getCompanyByName, removeCompany, updateCompany } from "../services/company";
+import { createCompany, getCompanies, getCompanyById, getCompanyByName, login, removeCompany, updateCompany } from "../services/company";
 import Logging from "../library/logging";
 
 const RegisterCompany = async (req: Request, res: Response) => {
@@ -72,4 +72,15 @@ const ReadAllCompanies = async (req: Request, res: Response) => {
         return res.status(500).json({ error: "Internal server error" })
     }
 }
-export { RegisterCompany, ReadCompany, UpdateCompany, ReadComapanyById, DeleteCompany, ReadAllCompanies }
+
+const Login = async (req: Request, res: Response) => {
+    try {
+        const token = await login(req.body);
+        Logging.info(`Token produced : ${token}`);
+        res.status(201).json({ token: token })
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" })
+    }
+}
+
+export { RegisterCompany, ReadCompany, UpdateCompany, ReadComapanyById, DeleteCompany, ReadAllCompanies, Login }
