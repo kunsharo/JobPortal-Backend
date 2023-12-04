@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createCompany, getCompanyById, getCompanyByName, updateCompany } from "../services/company";
+import { createCompany, getCompanies, getCompanyById, getCompanyByName, removeCompany, updateCompany } from "../services/company";
 import Logging from "../library/logging";
 
 const RegisterCompany = async (req: Request, res: Response) => {
@@ -38,7 +38,7 @@ const ReadComapanyById = async (req: Request, res: Response) => {
     }
 }
 
-const UpdateCompany =async (req: Request, res: Response) => {
+const UpdateCompany = async (req: Request, res: Response) => {
     try {
         const comapanyEmail = req.params.email;
         const companyId = await updateCompany(comapanyEmail, req.body);
@@ -47,7 +47,29 @@ const UpdateCompany =async (req: Request, res: Response) => {
         }
         return res.status(201).json({ updated_company: companyId})
     } catch (error) {
-        return res.status(500).json({ error: "Internal Server error"})
+        return res.status(500).json({ error: "Internal Server error" })
     }
 }
-export { RegisterCompany, ReadCompany, UpdateCompany, ReadComapanyById }
+
+const DeleteCompany = async (req: Request, res: Response) => {
+    try {
+        const companyEmail = req.params.email;
+        const result = await removeCompany(companyEmail)
+        if (result == null) {
+            return res.status(404).json({ error: "Not found" })
+        }
+        return res.status(201).json({ company: result })
+    } catch (error) {
+        return res.status(500).json({ error: "Internal Server error" })
+    }
+}
+
+const ReadAllCompanies = async (req: Request, res: Response) => {
+    try {
+        const companies = await getCompanies()
+        return res.status(201).json({ companies: companies })
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error" })
+    }
+}
+export { RegisterCompany, ReadCompany, UpdateCompany, ReadComapanyById, DeleteCompany, ReadAllCompanies }

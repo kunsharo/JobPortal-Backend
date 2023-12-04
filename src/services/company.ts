@@ -29,9 +29,19 @@ const getCompanyById = async (id: String) => {
     .select({ password: 0, createdAt: 0, updatedAt: 0 })
 }
 
+const getCompanies = async () => {
+    return await Company
+    .find()
+    .select({ password: 0, createdAt: 0, updatedAt: 0 })
+}
+
 const updateCompany = async (email: String, data: any) => {
     const company = await Company.findOneAndUpdate({ email: email }, data)
     return company?._id
 }
 
-export { createCompany, getCompanyByName, updateCompany, getCompanyById}
+const removeCompany = async (email: String) => {
+    return await Company.deleteOne({ email: email})
+}
+
+export { createCompany, getCompanyByName, updateCompany, getCompanyById, removeCompany, getCompanies }
